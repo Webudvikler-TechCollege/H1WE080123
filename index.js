@@ -12,16 +12,27 @@ app.get('/', (req, res) => {
 
 // Sangliste - med GET parameter eksempel
 app.get('/songs', (req, res) => {
-	db.query(`SELECT id,title 
-				FROM song`, (error, result) => {
+	db.query(`SELECT s.id, s.title, a.name 
+				FROM song s 
+				JOIN artist a 
+				ON s.artist_id = a.id`, (error, result) => {
 			res.json(result);
 	})
 })
 
 // Sangdetaljer - med URL parameter
 app.get('/songs/:id([0-9]*)', (req, res) => {
-	console.log(req.params);
-	res.send('Sange - Detaljer')
+	const { id } = req.params;
+	const sql = `
+		SELECT s.id, s.title, s.content, s.artist_id, a.name AS artist_name 
+		FROM song s 
+		JOIN artist a 
+		ON s.artist_id = a.id 
+		WHERE s.id = ${id}
+		`
+	db.query(sql, (error, result) => {
+		res.json(result)
+	})
 })
 
 // Opret ny sang
