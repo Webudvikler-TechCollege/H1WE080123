@@ -16,13 +16,19 @@ app.get('/songs', (req, res) => {
 				FROM song s 
 				JOIN artist a 
 				ON s.artist_id = a.id`, (error, result) => {
+		if(error) {
+			console.error(error)
+		} else {
 			res.json(result);
+		}
 	})
 })
 
 // Sangdetaljer - med URL parameter
 app.get('/songs/:id([0-9]*)', (req, res) => {
+	// Destructure assignment
 	const { id } = req.params;
+
 	const sql = `
 		SELECT s.id, s.title, s.content, s.artist_id, a.name AS artist_name 
 		FROM song s 

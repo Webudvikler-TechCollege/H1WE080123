@@ -14,7 +14,6 @@ class SongController {
 		db.query(sql, (error,result) => {
 			return res.json(result)
 		})
-
 	}
 
 	details = (req,res) => {
