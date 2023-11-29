@@ -2,8 +2,10 @@ import express from 'express'
 import dotenv from 'dotenv'
 import { SongRouter } from './Routes/song.router.js'
 dotenv.config()
-
 const app = express()
+
+// Udvider app i index.js så vi kan læse form body data
+app.use(express.urlencoded({ extended: true }))
 
 app.use(SongRouter)
 

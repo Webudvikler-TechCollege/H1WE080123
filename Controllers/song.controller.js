@@ -30,6 +30,22 @@ class SongController {
 			return res.json(result)
 		})
 	}
+
+	create = (req, res) => {
+		const { title, content, artist_id } = req.body
+        const sql = `INSERT INTO song (title, content, artist_id) 
+                        VALUES (?,?,?)`
+        db.query(sql, [title,content,artist_id], (error,result) => {
+			if(error) {
+				console.log(error)
+			} else {
+				return res.json({
+					message: 'New song created',
+					newId: result.insertId
+				})
+			}
+        })
+	}
 }
 
 export default SongController
