@@ -40,6 +40,24 @@ class SongController {
 		})
 	}
 
+	search = (req,res) => {
+		const { keyword } = req.params
+
+		const sql = `SELECT s.id, s.title, s.content, 
+                                s.artist_id, a.name 
+                        FROM song s 
+                        JOIN artist a 
+                        ON s.artist_id = a.id 
+						WHERE s.title LIKE ? 
+						OR s.content LIKE ? 
+						OR a.name LIKE ?`
+
+		db.query(sql, ['%'+keyword+'%','%'+keyword+'%','%'+keyword+'%'], (error,result) => {
+			console.error(error);
+            return res.json(result)
+		})
+	}
+
 	// Opretter ny sang
 	create = (req, res) => {
 		// Destructure assignment - henter værdier fra Form Body
@@ -78,7 +96,24 @@ class SongController {
 				})
 			}
         })
-	}	
+	}
+
+	delete = (req, res) => {
+		// Destructure assignment - henter værdier fra Form Body
+        const { id } = req.body
+        
+		const sql = `DELETE FROM song WHERE id = ?`
+		db.query(sql, [id], (error,result) => {
+			if(error) {
+                console.log(error)
+            } else {
+                // Returnerer json med nyeste id
+                return res.json({
+                    message: 'Song Deleted'
+                })
+            }
+		})
+	}
 }
 
 export default SongController

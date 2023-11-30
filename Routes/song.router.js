@@ -16,6 +16,10 @@ router.get('/songs/:id([0-9]*)', (req,res) => {
 	controller.details(req,res)
 })
 
+router.get('/songs/search/:keyword', (req,res) => {
+	controller.search(req,res)
+})
+
 // Opretter ny sang
 router.post('/songs', (req, res) => {
 	controller.create(req,res)
@@ -24,6 +28,11 @@ router.post('/songs', (req, res) => {
 // Opdaterer sang
 router.put('/songs', (req, res) => {
 	controller.update(req,res)
+})
+
+// Sletter sang
+router.delete('/songs', (req, res) => {
+	controller.delete(req,res)
 })
 
 export { router as SongRouter } 
