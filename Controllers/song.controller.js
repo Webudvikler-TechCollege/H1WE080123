@@ -5,7 +5,11 @@ class SongController {
 		console.log('Class SongController instantiated');
 	}
 
-	// Henter alle sange
+	/**
+	 * List Method - List all songs
+	 * @param {object} req 
+	 * @param {object} res 
+	 */
 	list = (req,res) => {
 		// SQL Query med json return
 		const sql = `SELECT s.id, s.title, a.name 
@@ -21,7 +25,11 @@ class SongController {
 		})
 	}
 
-	// Henter sang detaljer
+	/**
+	 * Details Method - List single song
+	 * @param {object} req Request Object
+	 * @param {object} res Response Object
+	 */
 	details = (req,res) => {
 		// Destructuring assignment - henter id fra URL param
 		const { id } = req.params
@@ -40,9 +48,16 @@ class SongController {
 		})
 	}
 
+	/**
+     * Search Method - Search songs by title or content
+     * @param {object} req Request Object
+     * @param {object} res Response Object
+     */
 	search = (req,res) => {
+		// Destructuring assignment - henter keyword fra URL param
 		const { keyword } = req.params
 
+		// SQL Query med value markers (?) og json return
 		const sql = `SELECT s.id, s.title, s.content, 
                                 s.artist_id, a.name 
                         FROM song s 
@@ -52,13 +67,20 @@ class SongController {
 						OR s.content LIKE ? 
 						OR a.name LIKE ?`
 
-		db.query(sql, ['%'+keyword+'%','%'+keyword+'%','%'+keyword+'%'], (error,result) => {
+		// Fikser søgesteng så den kan indgå i ord
+		const fixed_keyword = '%'+keyword+'%'
+
+		db.query(sql, [fixed_keyword,fixed_keyword,fixed_keyword], (error,result) => {
 			console.error(error);
             return res.json(result)
 		})
 	}
 
-	// Opretter ny sang
+	/**
+	 * Create Method - Create a new song
+	 * @param {*} req Request Object
+	 * @param {*} res Response Object
+	 */
 	create = (req, res) => {
 		// Destructure assignment - henter værdier fra Form Body
 		const { title, content, artist_id } = req.body
@@ -78,7 +100,11 @@ class SongController {
         })
 	}
 
-	// Opdaterer ny sang
+	/**
+	 * Update Method - Update a song
+	 * @param {*} req Request Object
+	 * @param {*} res Response Object
+	 */
 	update = (req, res) => {
 		// Destructure assignment - henter værdier fra Form Body
 		const { id, title, content, artist_id } = req.body
@@ -98,6 +124,11 @@ class SongController {
         })
 	}
 
+	/**
+     * Delete Method - Delete a song
+     * @param {*} req Request Object
+     * @param {*} res Response Object
+     */
 	delete = (req, res) => {
 		// Destructure assignment - henter værdier fra Form Body
         const { id } = req.body
