@@ -16,8 +16,14 @@ router.get('/songs/:id([0-9]*)', (req,res) => {
 	controller.details(req,res)
 })
 
+// Opretter ny sang
 router.post('/songs', (req, res) => {
 	controller.create(req,res)
+})
+
+// Opdaterer sang
+router.put('/songs', (req, res) => {
+	controller.update(req,res)
 })
 
 export { router as SongRouter } 

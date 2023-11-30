@@ -42,7 +42,7 @@ class SongController {
 
 	// Opretter ny sang
 	create = (req, res) => {
-		// Destructuring assignment - henter værdier fra Form Body
+		// Destructure assignment - henter værdier fra Form Body
 		const { title, content, artist_id } = req.body
 		// SQL Statement med value markers (?)
         const sql = `INSERT INTO song (title, content, artist_id) 
@@ -59,6 +59,26 @@ class SongController {
 			}
         })
 	}
+
+	// Opdaterer ny sang
+	update = (req, res) => {
+		// Destructure assignment - henter værdier fra Form Body
+		const { id, title, content, artist_id } = req.body
+		// SQL Statement med value markers (?)
+        const sql = `UPDATE song 
+						SET title = ?, content =?, artist_id = ? 
+                        WHERE id = ?`
+        db.query(sql, [title,content,artist_id,id], (error,result) => {
+			if(error) {
+				console.log(error)
+			} else {
+				// Returnerer json med nyeste id
+				return res.json({
+					message: 'Song Updated'
+				})
+			}
+        })
+	}	
 }
 
 export default SongController
