@@ -16,7 +16,7 @@ router.get('/songs/:id([0-9]*)', (req,res) => {
 	controller.details(req,res)
 })
 
-router.get('/songs/search/:keyword', (req,res) => {
+router.get('/songs/search', (req,res) => {
 	controller.search(req,res)
 })
 

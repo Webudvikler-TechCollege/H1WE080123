@@ -55,7 +55,7 @@ class SongController {
      */
 	search = (req,res) => {
 		// Destructuring assignment - henter keyword fra URL param
-		const { keyword } = req.params
+		const { keyword } = req.query
 
 		// SQL Query med value markers (?) og json return
 		const sql = `SELECT s.id, s.title, s.content, 
@@ -71,15 +71,15 @@ class SongController {
 		const fixed_keyword = '%'+keyword+'%'
 
 		db.query(sql, [fixed_keyword,fixed_keyword,fixed_keyword], (error,result) => {
-			console.error(error);
+			if(error) throw error
             return res.json(result)
 		})
 	}
 
 	/**
 	 * Create Method - Create a new song
-	 * @param {*} req Request Object
-	 * @param {*} res Response Object
+	 * @param {object} req Request Object
+	 * @param {object} res Response Object
 	 */
 	create = (req, res) => {
 		// Destructure assignment - henter værdier fra Form Body
@@ -88,15 +88,12 @@ class SongController {
         const sql = `INSERT INTO song (title, content, artist_id) 
                         VALUES (?,?,?)`
         db.query(sql, [title,content,artist_id], (error,result) => {
-			if(error) {
-				console.log(error)
-			} else {
-				// Returnerer json med nyeste id
-				return res.json({
-					message: 'New song created',
-					newId: result.insertId
-				})
-			}
+			if(error) throw error
+			// Returnerer json med nyeste id
+			return res.json({
+				message: 'New song created',
+				newId: result.insertId
+			})
         })
 	}
 
